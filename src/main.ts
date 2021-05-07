@@ -1,5 +1,5 @@
 import App from './App.svelte';
-import './main.css';
+import './css/main.css';
 
 const target = document.querySelectorAll('.flex.flex-row')[2];
 target.innerHTML = '';
