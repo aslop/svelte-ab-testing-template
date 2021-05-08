@@ -1,33 +1,25 @@
 <script lang="ts">
-  export let name: string;
-</script>
+  import { onMount } from 'svelte';
 
-<main>
-  <h1>Hello {name}!</h1>
-  <p>
-    Visit the <a href="https://svelte.dev/tutorial">Svelte tutorial</a> to learn how to build Svelte
-    apps.
-  </p>
-</main>
+  import MainExperimentComponent from './MainExperimentComponent.svelte';
+  import { replaceWithExperiment } from './lib/injectExperiment';
 
-<style>
-  main {
-    text-align: center;
-    padding: 1em;
-    max-width: 240px;
-    margin: 0 auto;
-  }
+  //   Css selector of the main element of the experiment
+  const cssSelector = 'div';
 
-  h1 {
-    color: #ff3e00;
-    text-transform: uppercase;
-    font-size: 4em;
-    font-weight: 100;
-  }
+  //   Loop on mount which ensures the element exists before trying to replace it with the svelte instance
+  onMount(() => {
+    let frame = requestAnimationFrame(loop);
+    function loop() {
+      const elementFound = document.querySelector(cssSelector);
 
-  @media (min-width: 640px) {
-    main {
-      max-width: none;
+      if (elementFound) {
+        replaceWithExperiment(elementFound, MainExperimentComponent);
+        cancelAnimationFrame(frame);
+      }
     }
-  }
-</style>
+    return () => {
+      cancelAnimationFrame(frame);
+    };
+  });
+</script>
